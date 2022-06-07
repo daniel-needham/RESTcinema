@@ -12,7 +12,9 @@ public class Seat {
 
     private UUID uuid;
 
+    public Seat(){
 
+    }
     public Seat(int row, int column) {
         this.row = row;
         this.column = column;
@@ -26,6 +28,14 @@ public class Seat {
 
     public int getColumn() {
         return column;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
     }
 
     @JsonIgnore

@@ -30,9 +30,9 @@ public class SeatingController {
             Seat seatPurchased = cinemaOne.reserveSeat(seatRequested.getRow(), seatRequested.getColumn());
             return new ResponseEntity<>(seatPurchased, HttpStatus.OK);
         } catch (SeatPlan.SeatFilledException e) {
-            return new ResponseEntity<>(Map.of("error", "The ticket has been already purchased!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorResponse("The ticket has been already purchased!"), HttpStatus.BAD_REQUEST);
         } catch (IndexOutOfBoundsException e) {
-            return new ResponseEntity<>(Map.of("error", "The number of a row or a column is out of bounds!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorResponse("The number of a row or a column is out of bounds!"), HttpStatus.BAD_REQUEST);
         }
     }
 }
