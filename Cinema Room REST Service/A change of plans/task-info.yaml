@@ -412,9 +412,9 @@ files:
 - name: src/cinema/ErrorResponse.java
   visible: true
   learner_created: true
-- name: src/cinema/PurchaseRequest.java
-  visible: true
-  learner_created: true
 feedback_link: https://hyperskill.org/projects/189/stages/947/implement#comment
-status: Unchecked
-record: -1
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Tue, 07 Jun 2022 17:25:57 UTC
+record: 3

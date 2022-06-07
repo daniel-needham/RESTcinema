@@ -1,15 +1,21 @@
 package cinema;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import java.util.UUID;
 
 public class Seat {
+    @JsonView(View.Public.class)
     private int row;
+    @JsonView(View.Public.class)
     private int column;
+    @JsonIgnore
     private boolean taken;
+    @JsonView(View.Public.class)
     private int price;
 
+    @JsonIgnore
     private UUID uuid;
 
     public Seat(){
@@ -38,7 +44,7 @@ public class Seat {
         this.column = column;
     }
 
-    @JsonIgnore
+
     public boolean isTaken() {
         return taken;
     }
@@ -50,7 +56,6 @@ public class Seat {
     public int getPrice() {
         return price;
     }
-    @JsonIgnore
     public UUID getUuid() {
         return uuid;
     }

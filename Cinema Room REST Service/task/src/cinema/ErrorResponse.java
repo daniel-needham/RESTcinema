@@ -1,7 +1,10 @@
 package cinema;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 public class ErrorResponse {
 
+    @JsonView(View.Public.class)
     private String error;
 
     public ErrorResponse() {

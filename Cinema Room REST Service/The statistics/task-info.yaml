@@ -449,6 +449,152 @@ files:
         };
     }
   learner_created: false
+- name: src/cinema/Seat.java
+  visible: true
+  text: |
+    package cinema;
+
+    import com.fasterxml.jackson.annotation.JsonIgnore;
+    import com.fasterxml.jackson.annotation.JsonView;
+
+    import java.util.UUID;
+
+    public class Seat {
+        @JsonView(View.Public.class)
+        private int row;
+        @JsonView(View.Public.class)
+        private int column;
+        @JsonIgnore
+        private boolean taken;
+        @JsonView(View.Public.class)
+        private int price;
+
+        @JsonIgnore
+        private UUID uuid;
+
+        public Seat(){
+
+        }
+        public Seat(int row, int column) {
+            this.row = row;
+            this.column = column;
+            taken = false;
+            price = (row <= 4) ? 10 : 8;
+        }
+
+        public int getRow() {
+            return row;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public void setRow(int row) {
+            this.row = row;
+        }
+
+        public void setColumn(int column) {
+            this.column = column;
+        }
+
+
+        public boolean isTaken() {
+            return taken;
+        }
+
+        public void setTaken(boolean taken) {
+            this.taken = taken;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+        public UUID getUuid() {
+            return uuid;
+        }
+
+        public void setUuid(UUID uuid) {
+            this.uuid = uuid;
+        }
+
+        public String returnString() {
+            return "Row: " + row + "Column: " + column + " - " + taken;
+        }
+    }
+  learner_created: true
+- name: src/cinema/JsonResponseView.java
+  visible: true
+  text: |
+    package cinema;
+
+    import com.fasterxml.jackson.annotation.JsonProperty;
+    import com.fasterxml.jackson.annotation.JsonView;
+
+    import java.util.UUID;
+
+    public class JsonResponseView {
+        @JsonView(View.Purchase.class)
+        private UUID token;
+        @JsonView(View.Purchase.class)
+        private Seat ticket;
+        @JsonView(View.Return.class)
+        @JsonProperty("returned_ticket")
+        private Seat returnedTicket;
+
+        public JsonResponseView(Seat seat) {
+            token = seat.getUuid();
+            ticket = seat;
+            returnedTicket = ticket;
+
+        }
+    }
+  learner_created: true
+- name: src/cinema/ErrorResponse.java
+  visible: true
+  text: |
+    package cinema;
+
+    import com.fasterxml.jackson.annotation.JsonView;
+
+    public class ErrorResponse {
+
+        @JsonView(View.Public.class)
+        private String error;
+
+        public ErrorResponse() {
+
+        }
+        public ErrorResponse(String error) {
+            this.error = error;
+        }
+
+        public String getError() {
+            return error;
+        }
+
+        public void setError(String error) {
+            this.error = error;
+        }
+
+
+    }
+  learner_created: true
+- name: src/cinema/View.java
+  visible: true
+  text: |
+    package cinema;
+
+    public class View {
+        static class Public {}
+
+        static class Seats extends Public{}
+
+        static class Transactions extends Public{}
+        static class Purchase extends Transactions{}
+        static class Return extends Transactions{}
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/189/stages/948/implement#comment
 status: Unchecked
 record: -1

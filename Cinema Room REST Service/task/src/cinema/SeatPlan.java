@@ -2,6 +2,7 @@ package cinema;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -12,10 +13,13 @@ public class SeatPlan {
     private Seat[] seatPlan;
     @JsonIgnore
     private List<Seat> purchasedSeats;
+    @JsonView(View.Public.class)
     @JsonProperty("total_rows")
     private int rows;
+    @JsonView(View.Public.class)
     @JsonProperty("total_columns")
     private int columns;
+    @JsonView(View.Public.class)
     @JsonProperty("available_seats")
     private List<Seat> availableSeats;
 
@@ -27,7 +31,7 @@ public class SeatPlan {
         int iter = 0;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
-                seatPlan[iter] = new Seat(i + 1,j + 1);
+                seatPlan[iter] = new Seat(i + 1, j + 1);
                 iter++;
             }
 
@@ -37,7 +41,7 @@ public class SeatPlan {
     }
 
     public Seat reserveSeat(int row, int column) throws SeatFilledException {
-        int seatPlanIndex = twoToOneDimensionConv(row - 1 , column - 1);
+        int seatPlanIndex = twoToOneDimensionConv(row - 1, column - 1);
         if (row > rows || column > columns || row < 1 || column < 1) {
             throw new IndexOutOfBoundsException();
         }
@@ -57,8 +61,8 @@ public class SeatPlan {
 
     public Seat unreserveSeat(UUID uuid) throws NoSuchElementException {
         Seat foundSeat = null;
-        for (Seat seat: purchasedSeats) {
-            if (seat.getUuid() == uuid) {
+        for (Seat seat : purchasedSeats) {
+            if (seat.getUuid().equals(uuid)) {
                 foundSeat = seat;
             }
         }
@@ -69,7 +73,7 @@ public class SeatPlan {
     }
 
     public void clearSeats() {
-        for (Seat seat:seatPlan) {
+        for (Seat seat : seatPlan) {
             seat.setTaken(false);
         }
         availableSeats = List.of(seatPlan);
