@@ -22,6 +22,8 @@ public class SeatPlan {
     @JsonView(View.Public.class)
     @JsonProperty("available_seats")
     private List<Seat> availableSeats;
+    @JsonIgnore
+    private int currentIncome;
 
 
     public SeatPlan(int row, int column) {
@@ -38,6 +40,7 @@ public class SeatPlan {
         }
         availableSeats = new ArrayList<>(Arrays.asList(seatPlan));
         purchasedSeats = new LinkedList<>();
+        currentIncome = 0;
     }
 
     public Seat reserveSeat(int row, int column) throws SeatFilledException {
@@ -54,7 +57,7 @@ public class SeatPlan {
             purchasedSeats.add(seat);
             seat.setTaken(true);
             seat.setUuid(UUID.randomUUID());
-
+            currentIncome += seat.getPrice();
             return seat;
         }
     }
@@ -69,6 +72,8 @@ public class SeatPlan {
         if (foundSeat == null) throw new NoSuchElementException();
         foundSeat.setTaken(false);
         availableSeats.add(foundSeat);
+        purchasedSeats.remove(foundSeat);
+        currentIncome -= foundSeat.getPrice();
         return foundSeat;
     }
 
@@ -77,8 +82,31 @@ public class SeatPlan {
             seat.setTaken(false);
         }
         availableSeats = List.of(seatPlan);
+        purchasedSeats.clear();
     }
 
+    public class SeatFilledException extends RuntimeException {
+        public SeatFilledException(String message) {
+            super(message);
+        }
+    }
+
+    private int twoToOneDimensionConv(int row, int column) {
+        int result = (row * this.rows) + column;
+        return result;
+    }
+
+    public int getAmountOfPurchased() {
+        return purchasedSeats.size();
+    }
+
+    public int getAmountOfAvailable() {
+        return availableSeats.size();
+    }
+
+    public int getCurrentIncome() {
+        return currentIncome;
+    }
 
     public Seat[] getSeatPlan() {
         return seatPlan;
@@ -94,18 +122,6 @@ public class SeatPlan {
 
     public List<Seat> getAvailableSeats() {
         return availableSeats;
-    }
-
-
-    public class SeatFilledException extends RuntimeException {
-        public SeatFilledException(String message) {
-            super(message);
-        }
-    }
-
-    private int twoToOneDimensionConv(int row, int column) {
-        int result = (row * this.rows) + column;
-        return result;
     }
 
 }

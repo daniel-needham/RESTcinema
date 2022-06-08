@@ -4,15 +4,9 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 public class SeatingController {
@@ -53,6 +47,16 @@ public class SeatingController {
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/stats")
+    public ResponseEntity<?> returnStats(@RequestParam(required = false) String password) {
+        if (password == null || !password.equals("super_secret")) {
+            return new ResponseEntity<>(new ErrorResponse("The password is wrong!"), HttpStatus.UNAUTHORIZED);
+
+        }
+        return new ResponseEntity<>(Map.of("current_income", cinemaOne.getCurrentIncome(), "number_of_available_seats", cinemaOne.getAmountOfAvailable()
+                , "number_of_purchased_tickets", cinemaOne.getAmountOfPurchased()), HttpStatus.OK);
     }
 
 }

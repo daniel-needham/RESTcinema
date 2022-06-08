@@ -15,7 +15,6 @@ public class Main {
         return new SeatPlan(row,column);
     }
 
-
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
